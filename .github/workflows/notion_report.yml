@@ -1,0 +1,26 @@
+name: Notion Weekly Report
+
+on:
+  schedule:
+    - cron: "0 12 * * 1"  # Runs every Monday at 12:00 UTC
+  workflow_dispatch:  # Allows manual execution
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Run Notion Report Script
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+        run: python notion_report.py
