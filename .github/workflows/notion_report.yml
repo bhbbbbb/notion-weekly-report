@@ -2,7 +2,7 @@ name: Notion Weekly Report
 
 on:
   schedule:
-    - cron: "0 12 * * 1"  # Runs every Monday at 12:00 UTC
+    - cron: "0 0 * * 1"  # Runs every Monday at 08:00 Taipei time (UTC+8)
   workflow_dispatch:  # Allows manual execution
 
 jobs:
@@ -18,9 +18,10 @@ jobs:
           python-version: '3.9'
 
       - name: Install Dependencies
-        run: pip install requests
+        run: pip install requests python-dotenv  # Added python-dotenv if needed
 
       - name: Run Notion Report Script
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}  # Include this if sending to Slack
         run: python notion_report.py
