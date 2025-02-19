@@ -5,10 +5,10 @@ from dotenv import load_dotenv
 load_dotenv()
 # Load API keys from environment variables
 NOTION_API_KEY = os.getenv("NOTION_API_KEY")  # Store in GitHub Secrets
-DATABASE_ID = "8d5d28a856064783ad5adadf2c49b603"
+DATABASE_ID = "8d5d28a856064783ad5adadf2c49b603" # You need to change this depending on your database
 # Notion will give you this really long link: https://www.notion.so/8d5d28a856064783ad5adadf2c49b603?v=4ce8edb545e644209686c852a37425f3
 #You need to extract the alphanumeric part between / and ? to get the DATABASE_ID
-SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")  # Optional
+SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")  # You use this for specifying the channel, store the key in your secrets
 
 # Notion API Headers
 print(NOTION_API_KEY)
@@ -28,13 +28,13 @@ def get_tasks():
     payload = {
         "filter": {
             "or": [
-                {  # ✅ Filter tasks that were updated in the last 7 days
+                {  #  Filter tasks that were updated in the last 7 days
                     "property": "Last Modification",
                     "date": {
                         "on_or_after": last_week
                     }
                 },
-                {  # ✅ Fix: Use "status" type instead of "select"
+                {  #  Fix: Use "status" type instead of "select"
                     "property": "Status",
                     "status": {
                         "equals": "Completed"
@@ -47,7 +47,7 @@ def get_tasks():
     response = requests.post(url, headers=headers, json=payload)
 
     if response.status_code != 200:
-        print("❌ Error fetching tasks:", response.json())
+        print(" Error fetching tasks:", response.json())
         return []
 
     tasks = response.json().get("results", [])
@@ -100,7 +100,7 @@ def format_report(tasks):
         if status.lower() in ["in progress", "ongoing"]:  # Adjust based on your actual Notion status names
             ongoing_tasks.append(task_info)
         elif status.lower() in ["completed", "done"]:  # Adjust as needed
-            if last_modified and last_modified >= last_week:  # ✅ Only include tasks completed this week
+            if last_modified and last_modified >= last_week:  # Only include tasks completed this week
                 completed_tasks.append(task_info)
 
     # Build report text
@@ -110,7 +110,7 @@ def format_report(tasks):
 ⏳ *Ongoing Tasks:*
 {chr(10).join(ongoing_tasks) or "No ongoing tasks this week."}
 
-✅ *Completed Tasks (Updated This Week):*
+✅*Completed Tasks (Updated This Week):*
 {chr(10).join(completed_tasks) or "No tasks completed this week."}
     """
 
@@ -124,7 +124,7 @@ def create_notion_report(report_text):
     payload = {
         "parent": {"database_id": DATABASE_ID},
         "properties": {
-            "Task name": {  # ✅ Uses your actual "Task name" property
+            "Task name": {  #  Uses your actual "Task name" property
                 "title": [{"text": {"content": f"Weekly Report - {datetime.date.today()}"}}]
             }
         },
@@ -133,7 +133,7 @@ def create_notion_report(report_text):
                 "object": "block",
                 "type": "paragraph",
                 "paragraph": {
-                    "rich_text": [{"type": "text", "text": {"content": report_text}}]  # ✅ Fix: Added `rich_text`
+                    "rich_text": [{"type": "text", "text": {"content": report_text}}]  #  Fix: Added `rich_text`
                 }
             }
         ]
