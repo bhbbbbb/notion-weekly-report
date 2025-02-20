@@ -1,4 +1,4 @@
-name: Notion Weekly Report
+name: Notion Weekly Report - Gene
 
 on:
   schedule:
@@ -20,8 +20,9 @@ jobs:
       - name: Install Dependencies
         run: pip install requests python-dotenv  # Added python-dotenv if needed
 
-      - name: Run Notion Report Script
+      - name: Run Notion Report Script - Gene
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}  # Include this if sending to Slack
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID_TEAM_GENE }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEAM_GENE }}
         run: python notion_report.py
