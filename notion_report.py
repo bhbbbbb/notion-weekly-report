@@ -4,8 +4,12 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 # Load API keys from environment variables
+
+
+
 NOTION_API_KEY = os.getenv("NOTION_API_KEY")  # Store in GitHub Secrets
-DATABASE_ID = "8d5d28a856064783ad5adadf2c49b603" # You need to change this depending on your database
+DATABASE_ID = os.getenv("NOTION_DATABASE_ID")  # Now dynamically assigned
+#DATABASE_ID = "8d5d28a856064783ad5adadf2c49b603" # You need to change this depending on your database
 # Notion will give you this really long link: https://www.notion.so/8d5d28a856064783ad5adadf2c49b603?v=4ce8edb545e644209686c852a37425f3
 #You need to extract the alphanumeric part between / and ? to get the DATABASE_ID
 SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")  # You use this for specifying the channel, store the key in your secrets
