@@ -1,0 +1,28 @@
+name: Notion Weekly Report - Medimage
+
+on:
+  schedule:
+    - cron: "0 0 * * 1"  # Runs every Monday at 08:00 Taipei time (UTC+8)
+  workflow_dispatch:  # Allows manual execution
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: pip install requests python-dotenv  # Added python-dotenv if needed
+
+      - name: Run Notion Report Script - Gene
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID_TEAM_MEDIMAGE }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEAM_MEDIMAGE }}
+        run: python notion_report.py
