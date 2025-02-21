@@ -20,9 +20,9 @@ jobs:
       - name: Install Dependencies
         run: pip install requests python-dotenv  # Added python-dotenv if needed
 
-      - name: Run Notion Report Script - Gene
+      - name: Run Notion Report Script
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
-          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID_TEAM_DTA }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEAM_DTA }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: python notion_report.py
